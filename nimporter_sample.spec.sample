@@ -1,0 +1,41 @@
+# -*- mode: python ; coding: utf-8 -*-
+import os
+
+curDir = os.getcwd()
+cacheDir = os.path.join(curDir, 'nimutils', '__pycache__')
+pydDir = os.path.join('.', 'nimutils')
+block_cipher = None
+
+a = Analysis(['nimporter_sample.py'],
+             pathex=[curDir],
+             # nimporter が生成したpydファイルをバイナリとして追加する
+             binaries=[
+               (os.path.join(cacheDir, 'calc.pyd'), pydDir),
+               (os.path.join(cacheDir, 'thread_test.pyd'), pydDir),
+               (os.path.join(cacheDir, 'uuid.pyd'), pydDir),
+             ],
+             datas=[],
+             hiddenimports=['setuptools.py33compat','setuptools.py27compat'],
+             hookspath=[],
+             runtime_hooks=[],
+             excludes=[],
+             win_no_prefer_redirects=False,
+             win_private_assemblies=False,
+             cipher=block_cipher,
+             noarchive=False)
+pyz = PYZ(a.pure, a.zipped_data,
+             cipher=block_cipher)
+exe = EXE(pyz,
+          a.scripts,
+          a.binaries,
+          a.zipfiles,
+          a.datas,
+          [],
+          name='nimporter_sample',
+          debug=False,
+          bootloader_ignore_signals=False,
+          strip=False,
+          upx=True,
+          upx_exclude=[],
+          runtime_tmpdir=None,
+          console=True )
